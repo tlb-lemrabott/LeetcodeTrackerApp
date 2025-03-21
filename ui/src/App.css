@@ -1,0 +1,12 @@
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.welcome-message {
+    font-size: 18px;
+    color: #333;
+    margin-right: 6px;
+}

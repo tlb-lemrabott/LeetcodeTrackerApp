@@ -1,0 +1,88 @@
+.add-problem-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 8px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: background 0.3s ease;
+  }
+  
+  .add-problem-button:hover {
+    background-color: #0056b3;
+  }
+  
+
+  .status-summary {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-left: 0px;
+    margin-right: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .status-item {
+    font-weight: bold;
+  }
+
+  .top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .filter-bar select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .export-button {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .export-button .icon {
+    margin-right: 6px;
+  }
+  
+  .export-button.pdf {
+    background-color: #d9534f;
+    color: white;
+  }
+  
+  .export-button.excel {
+    background-color: #5cb85c;
+    color: white;
+  }
+
+  .export-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .total-count {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    text-align: left;
+    padding: 10px;
+  }
