@@ -29,13 +29,13 @@ public class ProblemController {
     private final ExcelExportService excelExportService;
     private final PDFExportService pdfExportService;
     @PostMapping
-    public Problem createTask(@RequestBody Problem problem) {
+    public Problem addNewProblem(@RequestBody Problem problem) {
         return service.createProblem(problem);
     }
 
     @PostMapping("/upload-list")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Problem>> createProblemsBulk(@RequestBody List<Problem> problems) {
+    public ResponseEntity<List<Problem>> addProblemsBulk(@RequestBody List<Problem> problems) {
         List<Problem> createdProblems = service.createProblemsBulk(problems);
         return ResponseEntity.ok(createdProblems);
     }
@@ -57,7 +57,7 @@ public class ProblemController {
         return ResponseEntity.ok(service.updateProblem(problemId, problem));
     }
     @GetMapping("/{problemId}")
-    public ResponseEntity<Problem> getTaskById(@PathVariable UUID problemId) {
+    public ResponseEntity<Problem> getProblemById(@PathVariable UUID problemId) {
         Optional<Problem> problem = service.getProblemById(problemId);
         return problem.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
