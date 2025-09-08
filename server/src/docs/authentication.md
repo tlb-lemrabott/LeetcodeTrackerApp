@@ -20,9 +20,9 @@ The LeetcodeTracker application now includes a comprehensive JWT-based authentic
 
 ## Authentication Endpoints
 
-### 1. User Signup
+### 1. Signup (Unified Endpoint)
 ```
-POST /auth/signup
+POST /api/v1/auth/signup
 ```
 
 **Request Body:**
@@ -30,7 +30,29 @@ POST /auth/signup
 {
   "username": "string (required)",
   "email": "string (required)",
-  "password": "string (required)"
+  "password": "string (required)",
+  "role": "string (optional, USER or ADMIN, defaults to USER)"
+}
+```
+
+**Examples:**
+
+**User Signup (default):**
+```json
+{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "password": "securePassword123"
+}
+```
+
+**Admin Signup:**
+```json
+{
+  "username": "admin_user",
+  "email": "admin@example.com",
+  "password": "adminPassword123",
+  "role": "ADMIN"
 }
 ```
 
@@ -42,41 +64,14 @@ POST /auth/signup
     "userId": "uuid",
     "username": "string",
     "email": "string",
-    "role": "USER"
+    "role": "USER|ADMIN"
   }
 }
 ```
 
-### 2. Admin Signup
+### 2. Login
 ```
-POST /auth/signup/admin
-```
-
-**Request Body:**
-```json
-{
-  "username": "string (required)",
-  "email": "string (required)",
-  "password": "string (required)"
-}
-```
-
-**Response:**
-```json
-{
-  "message": "User registered successfully",
-  "user": {
-    "userId": "uuid",
-    "username": "string",
-    "email": "string",
-    "role": "ADMIN"
-  }
-}
-```
-
-### 3. Login
-```
-POST /auth/login
+POST /api/v1/auth/login
 ```
 
 **Request Body:**
