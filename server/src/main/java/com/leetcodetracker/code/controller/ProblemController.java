@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/problems")
+@RequestMapping("/api/v1/problems")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class ProblemController {

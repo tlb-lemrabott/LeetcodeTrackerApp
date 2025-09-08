@@ -37,12 +37,12 @@ public class SecurityConfig {
             .cors(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authz -> authz
                 // Public endpoints
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/api/v1/auth/**").permitAll()
                 // Admin only endpoints
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/problems/upload-list", "/problems/import-json").hasRole("ADMIN")
+                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/v1/problems/upload-list", "/api/v1/problems/import-json").hasRole("ADMIN")
                 // User endpoints (authenticated users)
-                .requestMatchers("/problems/**").authenticated()
+                .requestMatchers("/api/v1/problems/**").authenticated()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex
