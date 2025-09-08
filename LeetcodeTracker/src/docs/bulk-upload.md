@@ -210,3 +210,7 @@ The bulk upload functionality has been tested with:
 - ✅ All difficulty levels (EASY, MEDIUM, HARD)
 - ✅ Proper timestamp handling
 - ✅ Error handling for invalid data
+
+## Related Documentation
+
+- [JSON File Import](import-json.md) - For importing problems from JSON files
