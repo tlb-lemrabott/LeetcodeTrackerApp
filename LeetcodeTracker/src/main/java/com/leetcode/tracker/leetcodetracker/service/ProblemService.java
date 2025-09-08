@@ -1,12 +1,16 @@
 package com.leetcode.tracker.leetcodetracker.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leetcode.tracker.leetcodetracker.entity.Problem;
 import com.leetcode.tracker.leetcodetracker.entity.ProblemStatus;
 import com.leetcode.tracker.leetcodetracker.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -63,5 +67,36 @@ public class ProblemService {
 
     public void deleteProblem(UUID id) {
         repository.deleteById(id);
+    }
+
+    public List<Problem> importProblemsFromJsonFile(MultipartFile file) throws IOException {
+        System.out.println("import problems from JSON file called! File: " + file.getOriginalFilename());
+        
+        // Validate file
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty");
+        }
+        
+        if (!file.getOriginalFilename().toLowerCase().endsWith(".json")) {
+            throw new IllegalArgumentException("File must be a JSON file");
+        }
+        
+        // Parse JSON file
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Problem> problems;
+        
+        try {
+            problems = objectMapper.readValue(file.getInputStream(), new TypeReference<List<Problem>>() {});
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid JSON format: " + e.getMessage());
+        }
+        
+        // Validate problems list
+        if (problems == null || problems.isEmpty()) {
+            throw new IllegalArgumentException("No problems found in the JSON file");
+        }
+        
+        // Use existing bulk create method
+        return createProblemsBulk(problems);
     }
 }
