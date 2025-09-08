@@ -15,6 +15,7 @@ import java.util.UUID;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -35,6 +36,18 @@ public class ProblemController {
     public ResponseEntity<List<Problem>> createProblemsBulk(@RequestBody List<Problem> problems) {
         List<Problem> createdProblems = service.createProblemsBulk(problems);
         return ResponseEntity.ok(createdProblems);
+    }
+
+    @PostMapping("/import-json")
+    public ResponseEntity<List<Problem>> importProblemsFromJson(@RequestParam("file") MultipartFile file) {
+        try {
+            List<Problem> createdProblems = service.importProblemsFromJsonFile(file);
+            return ResponseEntity.ok(createdProblems);
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
     @PutMapping("/{problemId}")
     public ResponseEntity<Problem> updateProblem(@PathVariable UUID problemId, @RequestBody Problem problem) {
