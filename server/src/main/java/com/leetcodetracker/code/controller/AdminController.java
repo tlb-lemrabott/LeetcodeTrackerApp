@@ -26,7 +26,8 @@ public class AdminController {
 
     @GetMapping("/users")
     public ResponseEntity<List<Map<String, Object>>> getAllUsers() {
-        List<User> users = userRepository.findAll();
+        // Get only regular users, exclude admins
+        List<User> users = userRepository.findByRole(com.leetcodetracker.code.entity.UserRole.USER);
         
         List<Map<String, Object>> userStats = users.stream().map(user -> {
             Map<String, Object> userData = new HashMap<>();
@@ -57,7 +58,9 @@ public class AdminController {
 
     @GetMapping("/users/{userId}/problems")
     public ResponseEntity<List<Map<String, Object>>> getUserProblems(@PathVariable String userId) {
+        // Search only from users with role USER, otherwise return RuntimeException("User not found")
         User user = userRepository.findById(java.util.UUID.fromString(userId))
+                .filter(u -> u.getRole() == com.leetcodetracker.code.entity.UserRole.USER)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
         List<Map<String, Object>> problems = problemRepository.findByUser(user).stream()
@@ -80,7 +83,8 @@ public class AdminController {
 
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Object>> getSystemStats() {
-        long totalUsers = userRepository.count();
+        // Make sure counted users have role USER and no ADMIN among them
+        long totalUsers = userRepository.findByRole(com.leetcodetracker.code.entity.UserRole.USER).size();
         long totalProblems = problemRepository.count();
         long totalTodo = problemRepository.countByUserAndStatus(null, ProblemStatus.TODO);
         long totalDoing = problemRepository.countByUserAndStatus(null, ProblemStatus.DOING);
