@@ -30,6 +30,12 @@ public class ProblemController {
     public Problem createTask(@RequestBody Problem problem) {
         return service.createProblem(problem);
     }
+
+    @PostMapping("/upload-list")
+    public ResponseEntity<List<Problem>> createProblemsBulk(@RequestBody List<Problem> problems) {
+        List<Problem> createdProblems = service.createProblemsBulk(problems);
+        return ResponseEntity.ok(createdProblems);
+    }
     @PutMapping("/{problemId}")
     public ResponseEntity<Problem> updateProblem(@PathVariable UUID problemId, @RequestBody Problem problem) {
         return ResponseEntity.ok(service.updateProblem(problemId, problem));

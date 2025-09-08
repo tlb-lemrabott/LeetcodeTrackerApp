@@ -22,6 +22,21 @@ public class ProblemService {
         problem.setTimePosted(new Date());
         return repository.save(problem);
     }
+
+    public List<Problem> createProblemsBulk(List<Problem> problems) {
+        System.out.println("create problems bulk called! Count: " + problems.size());
+        Date currentTime = new Date();
+        
+        // Set timePosted for all problems and doneTime for DONE problems
+        for (Problem problem : problems) {
+            problem.setTimePosted(currentTime);
+            if (problem.getStatus() == ProblemStatus.DONE) {
+                problem.setDoneTime(currentTime);
+            }
+        }
+        
+        return repository.saveAll(problems);
+    }
     public List<Problem> getAllProblems() {
         return repository.findAll();
     }
