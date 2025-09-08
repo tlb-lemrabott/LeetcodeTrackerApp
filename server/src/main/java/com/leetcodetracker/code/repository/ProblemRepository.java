@@ -17,4 +17,5 @@ public interface ProblemRepository extends JpaRepository<Problem, UUID> {
     List<Problem> findByUserAndStatus(User user, ProblemStatus status);
     long countByUser(User user);
     long countByUserAndStatus(User user, ProblemStatus status);
+    long countByStatus(ProblemStatus status);
 }

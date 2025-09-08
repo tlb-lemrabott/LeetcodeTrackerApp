@@ -86,9 +86,9 @@ public class AdminController {
         // Make sure counted users have role USER and no ADMIN among them
         long totalUsers = userRepository.findByRole(com.leetcodetracker.code.entity.UserRole.USER).size();
         long totalProblems = problemRepository.count();
-        long totalTodo = problemRepository.countByUserAndStatus(null, ProblemStatus.TODO);
-        long totalDoing = problemRepository.countByUserAndStatus(null, ProblemStatus.DOING);
-        long totalDone = problemRepository.countByUserAndStatus(null, ProblemStatus.DONE);
+        long totalTodo = problemRepository.countByStatus(ProblemStatus.TODO);
+        long totalDoing = problemRepository.countByStatus(ProblemStatus.DOING);
+        long totalDone = problemRepository.countByStatus(ProblemStatus.DONE);
         
         Map<String, Object> stats = new HashMap<>();
         stats.put("totalUsers", totalUsers);
