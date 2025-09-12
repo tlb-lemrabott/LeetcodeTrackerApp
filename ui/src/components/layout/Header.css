@@ -15,6 +15,47 @@
   align-items: center;
 }
 
+.header-left {
+  flex: 1;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+}
+
+.header-nav {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
+  background: none;
+  border: 1px solid transparent;
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.nav-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.nav-button.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 .app-title {
   margin: 0;
   font-size: 1.5rem;
@@ -25,7 +66,18 @@
 .user-info {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-4);
+}
+
+.logout-button {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+}
+
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
 }
 
 .welcome-message {
