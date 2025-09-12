@@ -1,70 +1,195 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addProblem } from "../store/problemSlice";
-import "./styles/ProblemForm.css";
+import { addProblem } from "../../store/problemSlice";
+import { Button } from "../common";
+import { useForm } from "../../hooks";
+import { validation } from "../../utils";
+import { PROBLEM_LEVEL, PROBLEM_STATUS } from "../../constants";
+import { apiService } from "../../services";
+import "./ProblemForm.css";
 
 const ProblemForm = ({ onClose }) => {
   const dispatch = useDispatch();
-  const [problem, setProblem] = useState({
-    problemName: "",
-    link: "",
-    level: "EASY",
-    status: "TODO",
-    comment: "",
-  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(addProblem(problem));
-    setProblem({ problemName: "", link: "", status: "TODO", comment: "" });
-    onClose();
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    isValid,
+  } = useForm(
+    {
+      problemName: "",
+      link: "",
+      level: PROBLEM_LEVEL.EASY,
+      status: PROBLEM_STATUS.TODO,
+      comment: "",
+    },
+    {
+      problemName: {
+        required: 'Problem name is required',
+        custom: (value) => {
+          if (value.length > 200) {
+            return 'Problem name must be less than 200 characters';
+          }
+          return null;
+        },
+      },
+      link: {
+        required: 'LeetCode link is required',
+        custom: (value) => {
+          if (!validation.url(value)) {
+            return 'Please enter a valid URL';
+          }
+          return null;
+        },
+      },
+      comment: {
+        custom: (value) => {
+          if (value && value.length > 500) {
+            return 'Comment must be less than 500 characters';
+          }
+          return null;
+        },
+      },
+    }
+  );
+
+  const onSubmit = async (formData) => {
+    try {
+      setIsSubmitting(true);
+      setError(null);
+      
+      const response = await apiService.createProblem(formData);
+      dispatch(addProblem(response));
+      onClose();
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to create problem';
+      setError(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="problem-form-modal">
-      <div className="problem-form-content">
-        <button className="problem-form-close" onClick={onClose}>×</button>
-        <h2>Add Problem</h2>
-        <form onSubmit={handleSubmit}>
+    <div className="problem-form">
+      <h2>Add New Problem</h2>
+      
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit(onSubmit)} className="problem-form-content">
+        <div className="form-group">
+          <label htmlFor="problemName">Problem Name</label>
           <input
             type="text"
-            placeholder="Problem Name"
-            value={problem.problemName}
-            onChange={(e) => setProblem({ ...problem, problemName: e.target.value })}
-            required
+            id="problemName"
+            name="problemName"
+            placeholder="Enter problem name"
+            value={values.problemName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={errors.problemName && touched.problemName ? 'error' : ''}
+            disabled={isSubmitting}
           />
+          {errors.problemName && touched.problemName && (
+            <span className="field-error">{errors.problemName}</span>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="link">LeetCode Link</label>
           <input
-            type="text"
-            placeholder="LeetCode Link"
-            value={problem.link}
-            onChange={(e) => setProblem({ ...problem, link: e.target.value })}
-            required
+            type="url"
+            id="link"
+            name="link"
+            placeholder="https://leetcode.com/problems/..."
+            value={values.link}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={errors.link && touched.link ? 'error' : ''}
+            disabled={isSubmitting}
           />
+          {errors.link && touched.link && (
+            <span className="field-error">{errors.link}</span>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="level">Difficulty Level</label>
           <select
-            value={problem.level}
-            onChange={(e) => setProblem({ ...problem, level: e.target.value })}
+            id="level"
+            name="level"
+            value={values.level}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            disabled={isSubmitting}
           >
-            <option value="EASY">EASY</option>
-            <option value="MEDIUM">MEDIUM</option>
-            <option value="HARD">HARD</option>
+            <option value={PROBLEM_LEVEL.EASY}>Easy</option>
+            <option value={PROBLEM_LEVEL.MEDIUM}>Medium</option>
+            <option value={PROBLEM_LEVEL.HARD}>Hard</option>
           </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="status">Status</label>
           <select
-            value={problem.status}
-            onChange={(e) => setProblem({ ...problem, status: e.target.value })}
+            id="status"
+            name="status"
+            value={values.status}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            disabled={isSubmitting}
           >
-            <option value="TODO">TO-DO</option>
-            <option value="DOING">DOING</option>
-            <option value="DONE">DONE</option>
+            <option value={PROBLEM_STATUS.TODO}>To Do</option>
+            <option value={PROBLEM_STATUS.DOING}>In Progress</option>
+            <option value={PROBLEM_STATUS.DONE}>Completed</option>
           </select>
-          <input
-            type="text"
-            placeholder="Comment"
-            value={problem.comment}
-            onChange={(e) => setProblem({ ...problem, comment: e.target.value })}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="comment">Comment (Optional)</label>
+          <textarea
+            id="comment"
+            name="comment"
+            placeholder="Add any notes or comments..."
+            value={values.comment}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={errors.comment && touched.comment ? 'error' : ''}
+            rows="3"
+            disabled={isSubmitting}
           />
-          <button type="submit">Add Problem</button>
-        </form>
-      </div>
+          {errors.comment && touched.comment && (
+            <span className="field-error">{errors.comment}</span>
+          )}
+        </div>
+
+        <div className="form-actions">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={!isValid || isSubmitting}
+          >
+            {isSubmitting ? 'Adding...' : 'Add Problem'}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };
