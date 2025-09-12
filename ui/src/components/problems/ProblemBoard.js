@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProblems } from "../store/problemSlice";
-import ProblemForm from "./ProblemForm";
-import ProblemList from "./ProblemList";
+import { fetchProblems } from "../../store/problemSlice";
+import { ProblemForm, ProblemList } from "./";
+import { Button, LoadingSpinner, Modal } from "../common";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilePdf, faFileExcel } from "@fortawesome/free-solid-svg-icons";
-import "./styles/ProblemBoard.css";
+import { faFilePdf, faFileExcel, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { apiService } from "../../services";
+import { STATUS_OPTIONS, LEVEL_OPTIONS, STATUS_COLORS, LEVEL_COLORS } from "../../constants";
+import "./ProblemBoard.css";
 
 const ProblemBoard = () => {
   const dispatch = useDispatch();
@@ -27,73 +29,112 @@ const ProblemBoard = () => {
     );
   });
 
-  const handleExport = (format) => {
-    const url = `http://localhost:8080/problems/export/${format}`;
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", `problems.${format}`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleExport = async (format) => {
+    try {
+      const blob = await apiService.exportProblems(format);
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `problems.${format}`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Export failed:', error);
+      // You might want to show a toast notification here
+    }
   };
 
-  if (status === "loading") return <p>Loading problems list...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (status === "loading") return <LoadingSpinner text="Loading problems..." />;
+  if (error) return <div className="error-message">Error: {error}</div>;
 
   return (
-    <div>
-      <div className="top-section">
-        <div className="controls">
-          <button className="add-problem-button" onClick={() => setShowForm(true)}>
+    <div className="problem-board">
+      <div className="problem-board-header">
+        <div className="problem-board-controls">
+          <Button
+            variant="primary"
+            onClick={() => setShowForm(true)}
+            className="add-problem-button"
+          >
+            <FontAwesomeIcon icon={faPlus} />
             Add Problem
-          </button>
+          </Button>
 
-          <div className="filter-bar">
-            <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-              <option value="">Filter by Status</option>
-              <option value="TODO">TODO</option>
-              <option value="DOING">DOING</option>
-              <option value="DONE">DONE</option>
+          <div className="filter-controls">
+            <select 
+              value={filterStatus} 
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="filter-select"
+            >
+              {STATUS_OPTIONS.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
 
-            <select value={filterLevel} onChange={(e) => setFilterLevel(e.target.value)}>
-              <option value="">Filter by Level</option>
-              <option value="Easy">Easy</option>
-              <option value="Medium">Medium</option>
-              <option value="Hard">Hard</option>
+            <select 
+              value={filterLevel} 
+              onChange={(e) => setFilterLevel(e.target.value)}
+              className="filter-select"
+            >
+              {LEVEL_OPTIONS.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </div>
-          <div className="export-buttons">
-            <button className="export-button pdf" onClick={() => handleExport("pdf")}>
-              <FontAwesomeIcon icon={faFilePdf} className="icon" /> Export as PDF
-            </button>
-            <button className="export-button excel" onClick={() => handleExport("excel")}>
-              <FontAwesomeIcon icon={faFileExcel} className="icon" /> Export as Excel
-            </button>
+
+          <div className="export-controls">
+            <Button
+              variant="outline"
+              onClick={() => handleExport("pdf")}
+              className="export-button"
+            >
+              <FontAwesomeIcon icon={faFilePdf} />
+              Export PDF
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => handleExport("excel")}
+              className="export-button"
+            >
+              <FontAwesomeIcon icon={faFileExcel} />
+              Export Excel
+            </Button>
           </div>
         </div>
+
         <div className="status-summary">
-          <span className="status-item">TODO: {countByStatus("TODO")}</span>
-          <span className="status-item">DOING: {countByStatus("DOING")}</span>
-          <span className="status-item">DONE: {countByStatus("DONE")}</span>
+          <div className="status-item" style={{ color: STATUS_COLORS.TODO }}>
+            TODO: {countByStatus("TODO")}
+          </div>
+          <div className="status-item" style={{ color: STATUS_COLORS.DOING }}>
+            DOING: {countByStatus("DOING")}
+          </div>
+          <div className="status-item" style={{ color: STATUS_COLORS.DONE }}>
+            DONE: {countByStatus("DONE")}
+          </div>
         </div>
       </div>
 
-      {showForm && (
-        <div className="modal">
-          <div className="modal-content">
-            <button className="close-button" onClick={() => setShowForm(false)}>×</button>
-            <ProblemForm onClose={() => setShowForm(false)} />
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={showForm}
+        onClose={() => setShowForm(false)}
+        title="Add New Problem"
+        size="medium"
+      >
+        <ProblemForm onClose={() => setShowForm(false)} />
+      </Modal>
 
       <ProblemList problems={filteredProblems} />
 
-      <div className="total-count">
-        <span>Total: {totalCount}</span>
+      <div className="problem-board-footer">
+        <span className="total-count">Total: {totalCount}</span>
       </div>
-
     </div>
   );
 };

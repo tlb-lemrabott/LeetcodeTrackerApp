@@ -54,58 +54,58 @@ class ApiService {
 
   // Authentication endpoints
   async login(credentials) {
-    const response = await this.client.post('/auth/login', credentials);
+    const response = await this.client.post('/api/v1/auth/login', credentials);
     return response.data;
   }
 
   async register(userData) {
-    const response = await this.client.post('/auth/register', userData);
+    const response = await this.client.post('/api/v1/auth/signup', userData);
     return response.data;
   }
 
   async logout() {
-    const response = await this.client.post('/auth/logout');
+    const response = await this.client.post('/api/v1/auth/logout');
     return response.data;
   }
 
   async refreshToken() {
-    const response = await this.client.post('/auth/refresh');
+    const response = await this.client.post('/api/v1/auth/refresh');
     return response.data;
   }
 
   // Problem endpoints
   async getProblems() {
-    const response = await this.client.get('/problems');
+    const response = await this.client.get('/api/v1/problems');
     return response.data;
   }
 
   async getProblemById(id) {
-    const response = await this.client.get(`/problems/${id}`);
+    const response = await this.client.get(`/api/v1/problems/${id}`);
     return response.data;
   }
 
   async createProblem(problemData) {
-    const response = await this.client.post('/problems', problemData);
+    const response = await this.client.post('/api/v1/problems', problemData);
     return response.data;
   }
 
   async updateProblem(id, problemData) {
-    const response = await this.client.put(`/problems/${id}`, problemData);
+    const response = await this.client.put(`/api/v1/problems/${id}`, problemData);
     return response.data;
   }
 
   async deleteProblem(id) {
-    const response = await this.client.delete(`/problems/${id}`);
+    const response = await this.client.delete(`/api/v1/problems/${id}`);
     return response.data;
   }
 
   async updateProblemStatus(id, status) {
-    const response = await this.client.patch(`/problems/${id}/status`, { status });
+    const response = await this.client.patch(`/api/v1/problems/${id}/status`, { status });
     return response.data;
   }
 
   async exportProblems(format) {
-    const response = await this.client.get(`/problems/export/${format}`, {
+    const response = await this.client.get(`/api/v1/problems/export/${format}`, {
       responseType: 'blob',
     });
     return response.data;
@@ -113,38 +113,38 @@ class ApiService {
 
   // User endpoints
   async getCurrentUser() {
-    const response = await this.client.get('/users/me');
+    const response = await this.client.get('/api/v1/users/me');
     return response.data;
   }
 
   async updateUser(userData) {
-    const response = await this.client.put('/users/me', userData);
+    const response = await this.client.put('/api/v1/users/me', userData);
     return response.data;
   }
 
   async getUserStats() {
-    const response = await this.client.get('/users/stats');
+    const response = await this.client.get('/api/v1/users/stats');
     return response.data;
   }
 
   // Admin endpoints
   async getAllUsers() {
-    const response = await this.client.get('/admin/users');
+    const response = await this.client.get('/api/v1/admin/dashboard/users');
     return response.data;
   }
 
   async getUserById(id) {
-    const response = await this.client.get(`/admin/users/${id}`);
+    const response = await this.client.get(`/api/v1/admin/users/${id}`);
     return response.data;
   }
 
   async updateUserStatus(id, status) {
-    const response = await this.client.patch(`/admin/users/${id}/status`, { status });
+    const response = await this.client.patch(`/api/v1/admin/users/${id}/status`, { status });
     return response.data;
   }
 
   async assignProblem(userId, problemId) {
-    const response = await this.client.post('/admin/problems/assign', {
+    const response = await this.client.post('/api/v1/admin/problems/assign', {
       userId,
       problemId,
     });
@@ -152,17 +152,17 @@ class ApiService {
   }
 
   async bulkAssignProblems(assignments) {
-    const response = await this.client.post('/admin/problems/bulk-assign', assignments);
+    const response = await this.client.post('/api/v1/admin/problems/bulk-assign', assignments);
     return response.data;
   }
 
   async getSystemStats() {
-    const response = await this.client.get('/admin/stats');
+    const response = await this.client.get('/api/v1/admin/dashboard/stats');
     return response.data;
   }
 
   async exportUserData(userId, format) {
-    const response = await this.client.get(`/admin/export/user/${userId}/${format}`, {
+    const response = await this.client.get(`/api/v1/admin/export/user/${userId}/${format}`, {
       responseType: 'blob',
     });
     return response.data;

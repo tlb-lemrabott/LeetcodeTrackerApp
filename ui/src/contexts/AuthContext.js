@@ -1,6 +1,7 @@
 // Authentication context
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { auth } from '../utils';
+import { apiService } from '../services';
 
 // Initial state
 const initialState = {
@@ -109,36 +110,52 @@ export const AuthProvider = ({ children }) => {
     try {
       dispatch({ type: AUTH_ACTIONS.LOGIN_START });
       
-      // This would typically call your API
-      // const response = await apiService.login(credentials);
-      
-      // For now, simulate API call
-      const mockResponse = {
-        token: 'mock-jwt-token',
-        user: {
-          id: 1,
-          username: credentials.username,
-          email: credentials.email || `${credentials.username}@example.com`,
-          role: 'USER',
-        },
-      };
+      const response = await apiService.login(credentials);
       
       // Store in localStorage
-      auth.setToken(mockResponse.token);
-      auth.setUser(mockResponse.user);
+      auth.setToken(response.token);
+      auth.setUser(response.user);
       
       dispatch({
         type: AUTH_ACTIONS.LOGIN_SUCCESS,
-        payload: mockResponse,
+        payload: response,
       });
       
-      return mockResponse;
+      return response;
     } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Login failed';
       dispatch({
         type: AUTH_ACTIONS.LOGIN_FAILURE,
-        payload: error.message || 'Login failed',
+        payload: errorMessage,
       });
-      throw error;
+      throw new Error(errorMessage);
+    }
+  };
+
+  // Register function
+  const register = async (userData) => {
+    try {
+      dispatch({ type: AUTH_ACTIONS.LOGIN_START });
+      
+      const response = await apiService.register(userData);
+      
+      // Store in localStorage
+      auth.setToken(response.token);
+      auth.setUser(response.user);
+      
+      dispatch({
+        type: AUTH_ACTIONS.LOGIN_SUCCESS,
+        payload: response,
+      });
+      
+      return response;
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Registration failed';
+      dispatch({
+        type: AUTH_ACTIONS.LOGIN_FAILURE,
+        payload: errorMessage,
+      });
+      throw new Error(errorMessage);
     }
   };
 
@@ -166,6 +183,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     ...state,
     login,
+    register,
     logout,
     clearError,
     updateUser,

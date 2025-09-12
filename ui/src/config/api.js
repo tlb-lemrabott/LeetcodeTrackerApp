@@ -5,33 +5,38 @@ import config from './environment';
 export const API_ENDPOINTS = {
   // Authentication
   AUTH: {
-    LOGIN: '/auth/login',
-    REGISTER: '/auth/register',
-    REFRESH: '/auth/refresh',
-    LOGOUT: '/auth/logout',
+    LOGIN: '/api/v1/auth/login',
+    REGISTER: '/api/v1/auth/signup',
+    REFRESH: '/api/v1/auth/refresh',
+    LOGOUT: '/api/v1/auth/logout',
   },
   
   // Problems
   PROBLEMS: {
-    BASE: '/problems',
-    BY_USER: (userId) => `/problems/user/${userId}`,
-    BY_ID: (id) => `/problems/${id}`,
-    ASSIGN: '/problems/assign',
-    BULK_ASSIGN: '/problems/bulk-assign',
+    BASE: '/api/v1/problems',
+    BY_USER: (userId) => `/api/v1/problems/user/${userId}`,
+    BY_ID: (id) => `/api/v1/problems/${id}`,
+    ASSIGN: '/api/v1/problems/assign',
+    BULK_ASSIGN: '/api/v1/problems/bulk-assign',
+    EXPORT: (format) => `/api/v1/problems/export/${format}`,
   },
   
   // Users
   USERS: {
-    BASE: '/users',
-    BY_ID: (id) => `/users/${id}`,
-    STATS: '/users/stats',
+    BASE: '/api/v1/users',
+    BY_ID: (id) => `/api/v1/users/${id}`,
+    STATS: '/api/v1/users/stats',
+    ME: '/api/v1/users/me',
   },
   
   // Admin
   ADMIN: {
-    USERS: '/admin/users',
-    STATS: '/admin/stats',
-    EXPORT: '/admin/export',
+    USERS: '/api/v1/admin/dashboard/users',
+    STATS: '/api/v1/admin/dashboard/stats',
+    EXPORT: '/api/v1/admin/export',
+    USER_BY_ID: (id) => `/api/v1/admin/users/${id}`,
+    ASSIGN_PROBLEM: '/api/v1/admin/problems/assign',
+    BULK_ASSIGN: '/api/v1/admin/problems/bulk-assign',
   },
 };
 
