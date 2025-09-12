@@ -1,27 +1,17 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { Provider } from "react-redux";
-import store from "./store/redux-store";
-import './App.css';
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Login, Signup } from "./components/auth";
 import { ProblemBoard } from "./components/problems";
 import { AdminDashboard } from "./components/admin";
 import { Header } from "./components/layout";
-import { AuthProvider, ThemeProvider, useAuth } from "./contexts";
+import { useAuth } from "./contexts";
+import './App.css';
 
 function App() {
   return (
-    <Provider store={store}>
-      <ThemeProvider>
-        <AuthProvider>
-          <Router>
-            <div className="app-container">
-              <AppRoutes />
-            </div>
-          </Router>
-        </AuthProvider>
-      </ThemeProvider>
-    </Provider>
+    <div className="app-container">
+      <AppRoutes />
+    </div>
   );
 }
 
