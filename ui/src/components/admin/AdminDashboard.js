@@ -4,7 +4,7 @@ import { useApi } from '../../hooks';
 import { apiService } from '../../services';
 import { Button, LoadingSpinner, Modal } from '../common';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faChartBar, faDownload, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faUsers, faChartBar, faDownload } from '@fortawesome/free-solid-svg-icons';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -32,7 +32,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     fetchStats();
     fetchUsers();
-  }, []);
+  }, [fetchStats, fetchUsers]);
 
   const handleUserClick = (user) => {
     setSelectedUser(user);

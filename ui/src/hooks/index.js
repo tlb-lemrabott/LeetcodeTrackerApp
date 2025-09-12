@@ -1,6 +1,6 @@
 // Custom React hooks
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { debounce, throttle } from '../utils';
+// Removed unused imports: debounce, throttle
 
 // Custom hook for API calls
 export const useApi = (apiFunction, dependencies = []) => {
@@ -21,7 +21,7 @@ export const useApi = (apiFunction, dependencies = []) => {
     } finally {
       setLoading(false);
     }
-  }, dependencies);
+  }, [apiFunction, ...(Array.isArray(dependencies) ? dependencies : [])]);
 
   return { data, loading, error, execute };
 };
@@ -190,7 +190,7 @@ export const useAsync = (asyncFunction, dependencies = []) => {
     return () => {
       isMounted = false;
     };
-  }, dependencies);
+  }, [asyncFunction, ...(Array.isArray(dependencies) ? dependencies : [])]);
 
   return state;
 };

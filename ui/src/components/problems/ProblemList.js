@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import UpdateProblemForm from "./UpdateProblemForm";
-import { deleteProblem, updateProblem } from "../store/problemSlice";
+import { deleteProblem, updateProblem } from "../../store/problemSlice";
 import "./styles/ProblemList.css";
 
 const ProblemList = ({ problems }) => {
