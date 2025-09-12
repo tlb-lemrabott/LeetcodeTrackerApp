@@ -1,0 +1,204 @@
+.problem-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.problem-table thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.problem-table th {
+  padding: 15px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.problem-table td {
+  padding: 12px;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.problem-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.problem-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.problem-table a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.problem-table a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.problem-table select {
+  padding: 4px 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.problem-table select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.comment-column {
+  max-width: 200px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.delete-button,
+.update-button {
+  padding: 6px 12px;
+  margin: 0 2px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+.update-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.update-button:hover {
+  background-color: #218838;
+}
+
+.problem-table tbody tr td:last-child {
+  white-space: nowrap;
+}
+
+/* Status-specific styling */
+.problem-table select option[value="TODO"] {
+  color: #ffc107;
+}
+
+.problem-table select option[value="DOING"] {
+  color: #17a2b8;
+}
+
+.problem-table select option[value="DONE"] {
+  color: #28a745;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .problem-table {
+    font-size: 13px;
+  }
+  
+  .problem-table th,
+  .problem-table td {
+    padding: 10px 8px;
+  }
+  
+  .comment-column {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .problem-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .problem-table thead,
+  .problem-table tbody,
+  .problem-table th,
+  .problem-table td,
+  .problem-table tr {
+    display: block;
+  }
+  
+  .problem-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  
+  .problem-table tr {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: white;
+  }
+  
+  .problem-table td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    white-space: normal;
+    text-align: left;
+  }
+  
+  .problem-table td:before {
+    content: attr(data-label) ": ";
+    position: absolute;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #495057;
+  }
+  
+  .comment-column {
+    max-width: none;
+  }
+  
+  .delete-button,
+  .update-button {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+
+/* Empty state */
+.problem-table tbody tr td[colspan] {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  padding: 40px 20px;
+}

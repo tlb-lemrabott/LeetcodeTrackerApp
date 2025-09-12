@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { updateProblem } from "../store/problemSlice";
-import "./styles/ProblemForm.css";
+import { updateProblem } from "../../store/problemSlice";
+import "./ProblemForm.css";
 
 const UpdateProblemForm = ({ problem, onClose }) => {
   const dispatch = useDispatch();

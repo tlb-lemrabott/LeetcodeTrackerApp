@@ -6,7 +6,7 @@ import { Button, LoadingSpinner, Modal } from "../common";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf, faFileExcel, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { apiService } from "../../services";
-import { STATUS_OPTIONS, LEVEL_OPTIONS, STATUS_COLORS, LEVEL_COLORS } from "../../constants";
+import { STATUS_OPTIONS, LEVEL_OPTIONS, STATUS_COLORS } from "../../constants";
 import "./ProblemBoard.css";
 
 const ProblemBoard = () => {

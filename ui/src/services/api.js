@@ -1,6 +1,6 @@
 // API service for making HTTP requests
 import axios from 'axios';
-import { API_CONFIG, buildApiUrl, getAuthHeaders } from '../config/api';
+import { API_CONFIG } from '../config/api';
 import { auth } from '../utils';
 
 // Create axios instance with default config
